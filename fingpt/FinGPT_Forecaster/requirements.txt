@@ -5,3 +5,4 @@ pandas
 yfinance
 finnhub-python
 nvidia-ml-py3
+gradio
