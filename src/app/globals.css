@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+:root {
+  --night: #150d1f;
+  --dusk: #1d142c;
+  --surface: #271b3a;
+  --surface-2: #322648;
+  --glow: #f6b17a;
+  --glow-bright: #fcdfbe;
+  --coral: #e8896b;
+  --lilac: #bba0dc;
+  --ink: #f4ece2;
+  --ink-dim: rgba(244, 236, 226, 0.66);
+  --ink-faint: rgba(244, 236, 226, 0.42);
+  --line: rgba(244, 236, 226, 0.12);
+}
+
+@theme inline {
+  --color-night: var(--night);
+  --color-dusk: var(--dusk);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-glow: var(--glow);
+  --color-glow-bright: var(--glow-bright);
+  --color-coral: var(--coral);
+  --color-lilac: var(--lilac);
+  --color-ink: var(--ink);
+  --color-ink-dim: var(--ink-dim);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+
+  --font-display: var(--font-instrument-serif);
+  --font-sans: var(--font-hanken-grotesk);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+body {
+  background: var(--night);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
