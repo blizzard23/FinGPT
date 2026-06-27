@@ -9,14 +9,14 @@ export type ReactionType = "like" | "fire" | "laugh" | "love";
 export type NoteSource = "text" | "voice";
 export type MemberRole = "owner" | "member";
 
-export interface Profile {
+export type Profile = {
   id: string;
   display_name: string;
   avatar_url: string | null;
   created_at: string;
 }
 
-export interface Capsule {
+export type Capsule = {
   id: string;
   name: string;
   cover_photo_id: string | null;
@@ -30,14 +30,14 @@ export interface Capsule {
   created_at: string;
 }
 
-export interface CapsuleMember {
+export type CapsuleMember = {
   capsule_id: string;
   user_id: string;
   role: MemberRole;
   joined_at: string;
 }
 
-export interface CapsuleInvite {
+export type CapsuleInvite = {
   id: string;
   capsule_id: string;
   token: string;
@@ -46,7 +46,7 @@ export interface CapsuleInvite {
   created_at: string;
 }
 
-export interface Photo {
+export type Photo = {
   id: string;
   capsule_id: string;
   uploader_id: string;
@@ -66,7 +66,7 @@ export interface Photo {
   created_at: string;
 }
 
-export interface Reaction {
+export type Reaction = {
   id: string;
   photo_id: string;
   user_id: string;
@@ -74,7 +74,7 @@ export interface Reaction {
   created_at: string;
 }
 
-export interface Comment {
+export type Comment = {
   id: string;
   photo_id: string;
   user_id: string;
@@ -82,7 +82,7 @@ export interface Comment {
   created_at: string;
 }
 
-export interface PhotoMood {
+export type PhotoMood = {
   id: string;
   photo_id: string;
   user_id: string;
@@ -90,7 +90,7 @@ export interface PhotoMood {
   created_at: string;
 }
 
-export interface MomentNote {
+export type MomentNote = {
   id: string;
   photo_id: string;
   user_id: string;
@@ -99,7 +99,7 @@ export interface MomentNote {
   created_at: string;
 }
 
-export interface PushSubscriptionRow {
+export type PushSubscriptionRow = {
   id: string;
   user_id: string;
   endpoint: string;
@@ -108,7 +108,7 @@ export interface PushSubscriptionRow {
   created_at: string;
 }
 
-export interface BookIntent {
+export type BookIntent = {
   id: string;
   capsule_id: string;
   user_id: string;
@@ -116,7 +116,7 @@ export interface BookIntent {
   created_at: string;
 }
 
-export interface InvitePreview {
+export type InvitePreview = {
   capsule_id: string;
   capsule_name: string;
   capsule_status: CapsuleStatus;
@@ -133,7 +133,7 @@ type Table<Row, Insert = Partial<Row>, Update = Partial<Row>> = {
   Relationships: [];
 };
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       profiles: Table<Profile>;
@@ -148,7 +148,7 @@ export interface Database {
       push_subscriptions: Table<PushSubscriptionRow>;
       book_intents: Table<BookIntent>;
     };
-    Views: Record<string, never>;
+    Views: { [_ in never]: never };
     Functions: {
       get_invite_preview: {
         Args: { p_token: string };
@@ -159,7 +159,7 @@ export interface Database {
         Returns: string;
       };
     };
-    Enums: Record<string, never>;
-    CompositeTypes: Record<string, never>;
+    Enums: { [_ in never]: never };
+    CompositeTypes: { [_ in never]: never };
   };
 }
