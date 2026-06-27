@@ -37,6 +37,8 @@ export function NoteComposer({
       SpeechRecognition?: new () => SpeechRecognitionLike;
       webkitSpeechRecognition?: new () => SpeechRecognitionLike;
     };
+    // Feature-detect on mount to keep SSR markup stable.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setVoiceSupported(Boolean(w.SpeechRecognition || w.webkitSpeechRecognition));
   }, []);
 

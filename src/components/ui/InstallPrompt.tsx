@@ -33,6 +33,9 @@ export function InstallPrompt({ onDismiss, onInstalled, className }: InstallProm
   );
 
   useEffect(() => {
+    // Platform/standalone detection must run on the client (not as initial
+    // state) to avoid SSR hydration mismatches.
+    /* eslint-disable react-hooks/set-state-in-effect */
     if (isStandalone()) {
       setPlatform(null);
       return;
@@ -42,6 +45,7 @@ export function InstallPrompt({ onDismiss, onInstalled, className }: InstallProm
       setPlatform("ios");
       return;
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
 
     const handler = (event: Event) => {
       event.preventDefault();

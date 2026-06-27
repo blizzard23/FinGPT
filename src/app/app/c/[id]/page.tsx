@@ -76,6 +76,20 @@ export default async function CapsuleDetailPage({
         </Card>
       )}
 
+      {capsule.status === "completed" && (
+        <Link href={`/app/c/${capsule.id}/book`}>
+          <Card className="flex items-center justify-between gap-3 border-glow/30 bg-gradient-to-r from-surface-2 to-surface transition-colors hover:border-glow/50">
+            <div>
+              <Eyebrow>Der Höhepunkt</Eyebrow>
+              <p className="mt-1 font-display text-xl text-ink">
+                Euer Erinnerungs-Buch ist fertig
+              </p>
+            </div>
+            <span className="text-2xl">📖</span>
+          </Card>
+        </Link>
+      )}
+
       {capsule.status !== "draft" && (
         <section className="flex flex-col gap-3">
           <Eyebrow>Eure Momente</Eyebrow>

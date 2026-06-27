@@ -13,6 +13,7 @@ const DEVELOP_DURATION_MS = 1500;
 export function DevelopingImage({
   className,
   containerClassName,
+  alt,
   ...imageProps
 }: DevelopingImageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -22,6 +23,8 @@ export function DevelopingImage({
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // Read on mount (not as initial state) to avoid SSR hydration mismatch.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setReducedMotion(query.matches);
     const onChange = (event: MediaQueryListEvent) => setReducedMotion(event.matches);
     query.addEventListener("change", onChange);
@@ -67,6 +70,7 @@ export function DevelopingImage({
     >
       <Image
         {...imageProps}
+        alt={alt}
         onLoad={() => setIsLoaded(true)}
         className={cn(
           reducedMotion
