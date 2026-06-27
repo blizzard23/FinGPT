@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCapsule, getCapsuleMembers } from "@/lib/capsules";
+import { getMyPhotos, withSignedUrls } from "@/lib/photos";
 import { getCurrentUser } from "@/lib/auth";
 import { Card } from "@/components/ui/Card";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -8,6 +9,8 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { AvatarStack } from "@/components/ui/AvatarStack";
 import { InviteButton } from "@/components/InviteButton";
 import { StartCapsuleButton } from "@/components/StartCapsuleButton";
+import { PhotoUploader } from "@/components/PhotoUploader";
+import { MyContribution } from "@/components/MyContribution";
 
 export default async function CapsuleDetailPage({
   params,
@@ -19,7 +22,11 @@ export default async function CapsuleDetailPage({
   const [capsule, user] = await Promise.all([getCapsule(id), getCurrentUser()]);
   if (!capsule) notFound();
 
-  const members = await getCapsuleMembers(id);
+  const [members, myPhotosRaw] = await Promise.all([
+    getCapsuleMembers(id),
+    getMyPhotos(id),
+  ]);
+  const myPhotos = await withSignedUrls(myPhotosRaw);
   const isOwner = user?.id === capsule.owner_id;
 
   return (
@@ -59,10 +66,18 @@ export default async function CapsuleDetailPage({
       )}
 
       <section className="flex flex-col gap-3">
-        <Eyebrow>Fotos</Eyebrow>
-        <Card className="py-8 text-center text-sm text-ink-dim">
-          Foto-Upload & Feed folgen (Phase 3 & 4).
-        </Card>
+        <Eyebrow>Dein Beitrag</Eyebrow>
+        <PhotoUploader capsuleId={capsule.id} />
+        <MyContribution
+          capsuleId={capsule.id}
+          photos={myPhotos.map((p) => ({
+            id: p.id,
+            thumbUrl: p.thumbUrl,
+            status: p.status,
+            location_name: p.location_name,
+            location_visible: p.location_visible,
+          }))}
+        />
       </section>
 
       <section className="flex flex-col gap-3">
