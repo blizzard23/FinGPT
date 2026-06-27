@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getCapsule, getCapsuleMembers } from "@/lib/capsules";
+import { getCapsule, getCapsuleMembers, getReleasedPhotos } from "@/lib/capsules";
 import { getMyPhotos, withSignedUrls } from "@/lib/photos";
 import { getCurrentUser } from "@/lib/auth";
 import { Card } from "@/components/ui/Card";
@@ -11,6 +11,8 @@ import { InviteButton } from "@/components/InviteButton";
 import { StartCapsuleButton } from "@/components/StartCapsuleButton";
 import { PhotoUploader } from "@/components/PhotoUploader";
 import { MyContribution } from "@/components/MyContribution";
+import { CapsuleFeed } from "@/components/CapsuleFeed";
+import { TriggerDripButton } from "@/components/TriggerDripButton";
 
 export default async function CapsuleDetailPage({
   params,
@@ -22,11 +24,15 @@ export default async function CapsuleDetailPage({
   const [capsule, user] = await Promise.all([getCapsule(id), getCurrentUser()]);
   if (!capsule) notFound();
 
-  const [members, myPhotosRaw] = await Promise.all([
+  const [members, myPhotosRaw, releasedRaw] = await Promise.all([
     getCapsuleMembers(id),
     getMyPhotos(id),
+    getReleasedPhotos(id),
   ]);
-  const myPhotos = await withSignedUrls(myPhotosRaw);
+  const [myPhotos, released] = await Promise.all([
+    withSignedUrls(myPhotosRaw),
+    withSignedUrls(releasedRaw),
+  ]);
   const isOwner = user?.id === capsule.owner_id;
 
   return (
@@ -41,7 +47,12 @@ export default async function CapsuleDetailPage({
           </h1>
           <StatusBadge status={capsule.status} />
         </div>
-        <AvatarStack people={members.map((m) => m.profile)} />
+        <div className="flex items-center justify-between">
+          <AvatarStack people={members.map((m) => m.profile)} />
+          {isOwner && capsule.status === "active" && (
+            <TriggerDripButton capsuleId={capsule.id} />
+          )}
+        </div>
       </div>
 
       {capsule.status === "draft" && (
@@ -63,6 +74,25 @@ export default async function CapsuleDetailPage({
             </p>
           )}
         </Card>
+      )}
+
+      {capsule.status !== "draft" && (
+        <section className="flex flex-col gap-3">
+          <Eyebrow>Eure Momente</Eyebrow>
+          <CapsuleFeed
+            capsuleId={capsule.id}
+            photos={released.map((p) => ({
+              id: p.id,
+              fullUrl: p.fullUrl,
+              thumbUrl: p.thumbUrl,
+              width: p.width,
+              height: p.height,
+              location_name: p.location_name,
+              location_visible: p.location_visible,
+              released_at: p.released_at,
+            }))}
+          />
+        </section>
       )}
 
       <section className="flex flex-col gap-3">
