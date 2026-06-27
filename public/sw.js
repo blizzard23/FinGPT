@@ -1,4 +1,4 @@
-const CACHE_NAME = "nachklang-shell-v1";
+const CACHE_NAME = "nachklang-shell-v2";
 const SHELL_ASSETS = ["/", "/manifest.json"];
 
 self.addEventListener("install", (event) => {
@@ -37,5 +37,46 @@ self.addEventListener("fetch", (event) => {
         })
         .catch(() => cached);
     })
+  );
+});
+
+// One notification per drip (the server bundles them). Tapping it deep-links
+// into the right capsule/photo.
+self.addEventListener("push", (event) => {
+  let payload = {};
+  try {
+    payload = event.data ? event.data.json() : {};
+  } catch {
+    payload = {};
+  }
+
+  const title = payload.title || "Nachklang";
+  const options = {
+    body: payload.body || "Ein neuer Moment ist da ✨",
+    icon: "/icons/icon-192.png",
+    badge: "/icons/icon-192.png",
+    tag: payload.tag || "nachklang",
+    data: { url: payload.url || "/app" },
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const url = (event.notification.data && event.notification.data.url) || "/app";
+
+  event.waitUntil(
+    self.clients
+      .matchAll({ type: "window", includeUncontrolled: true })
+      .then((clientList) => {
+        for (const client of clientList) {
+          if ("focus" in client) {
+            client.navigate(url);
+            return client.focus();
+          }
+        }
+        return self.clients.openWindow(url);
+      })
   );
 });

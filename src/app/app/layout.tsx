@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
 import { SignOutButton } from "@/components/SignOutButton";
+import { MomentPrompt } from "@/components/MomentPrompt";
 
 export default async function AppLayout({
   children,
@@ -20,6 +21,7 @@ export default async function AppLayout({
         </div>
       </header>
       {children}
+      <MomentPrompt />
     </div>
   );
 }

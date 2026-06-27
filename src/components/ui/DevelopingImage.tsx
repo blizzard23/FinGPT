@@ -50,6 +50,16 @@ export function DevelopingImage({
 
   const developed = isLoaded && (reducedMotion || isVisible);
 
+  // Announce the first time a photo finishes developing — the emotional beat the
+  // install / push opt-in is timed to (Phase 6).
+  const announced = useRef(false);
+  useEffect(() => {
+    if (developed && !announced.current) {
+      announced.current = true;
+      window.dispatchEvent(new CustomEvent("nachklang:developed"));
+    }
+  }, [developed]);
+
   return (
     <div
       ref={containerRef}
