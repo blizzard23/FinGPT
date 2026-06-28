@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Avatar } from "@/components/ui/Avatar";
@@ -54,15 +55,17 @@ export default function Home() {
       </section>
 
       <section className="flex flex-col gap-3">
-        <Card className="flex items-center justify-between gap-4 bg-surface-2">
-          <div>
-            <Eyebrow>Drip läuft</Eyebrow>
-            <p className="mt-1 text-sm text-ink-dim">
-              Noch 9 Tage, bis euer Buch fertig ist.
-            </p>
-          </div>
-          <Button>Ansehen</Button>
-        </Card>
+        <Link href="/app">
+          <Card className="flex items-center justify-between gap-4 bg-surface-2 transition-colors hover:border-glow/40">
+            <div>
+              <Eyebrow>Drip läuft</Eyebrow>
+              <p className="mt-1 text-sm text-ink-dim">
+                Noch 9 Tage, bis euer Buch fertig ist.
+              </p>
+            </div>
+            <Button>Loslegen</Button>
+          </Card>
+        </Link>
       </section>
     </main>
   );
